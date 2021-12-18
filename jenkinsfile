@@ -22,7 +22,7 @@ pipeline
                
             }
         }
-        stage('Continuous Build-Loans')
+        stage('Continuous Build_Loans')
         {
             steps
             {
@@ -33,10 +33,11 @@ pipeline
                       sh 'mvn package'   
                     }
                     catch(Exception e2)
-                    {                      mail bcc: '', body: 'Jenkins has failled to build the antitfacts. Please review and advise.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'devteam@rufyay.com'  
+                    {
+                      mail bcc: '', body: 'Jenkins has failled to build the antitfacts. Please review and advise.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'devteam@rufyay.com'   
                     }
                 }
             }
-        } 
-     }     
-  }    
+        }
+    }
+}
