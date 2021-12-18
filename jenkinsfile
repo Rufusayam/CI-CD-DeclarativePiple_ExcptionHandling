@@ -3,7 +3,7 @@ pipeline
     agent any
     stages
     {
-        stage('Continuous Download')
+        stage('Continuous Download_Loans')
         {
             steps
             {
@@ -22,7 +22,7 @@ pipeline
                
             }
         }
-        stage('Continuous Build')
+        stage('Continuous Build-Loans')
         {
             steps
             {
@@ -33,65 +33,10 @@ pipeline
                       sh 'mvn package'   
                     }
                     catch(Exception e2)
-                    {
-                      mail bcc: '', body: 'Jenkins has failled to build the antitfacts. Please review and advise.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'devteam@rufyay.com'  
+                    {                      mail bcc: '', body: 'Jenkins has failled to build the antitfacts. Please review and advise.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'devteam@rufyay.com'  
                     }
                 }
             }
         } 
-           stage('Continuous Deployment')
-        {
-            steps
-            {
-                script
-                {
-                    try
-                    {
-                        deploy adapters: [tomcat9(credentialsId: 'c8b5b2a2-1946-4bb8-94af-e32c07b8035c', path: '', url: 'http://172.31.15.218:8080')], contextPath: 'testapp', war: '**/*.war'
-                    }
-                    catch(Exception e3)
-                    {
-                       mail bcc: '', body: 'Jenkins was unable to deploy the antifacts in QA server for the testapp', cc: '', from: '', replyTo: '', subject: 'Deployment Failed', to: 'devteam@rufyay.com'
-                       exit(3)
-                    }
-                }
-            }
-        }
-              stage('Continuous Testing')
-        {
-            steps
-            {
-                script
-                {
-                    try
-                    {
-                       git 'https://github.com/intelliqittrainings/FunctionalTesting.git' 
-               sh 'java -jar /home/ubuntu/.jenkins/workspace/Declarativepipeline/testing.jar'  
-                    }
-                    catch(Exception e4)
-                    {
-                        mail bcc: '', body: 'Jenkins was unable to execute selenium test script. please review.', cc: '', from: '', replyTo: '', subject: 'Testing Failed', to: 'devteam@rufyay.com'
-                        exit(4)
-                    }
-                }
-            }
-        }
-        stage('Continuous Delivery')
-        {
-            steps
-            {
-                script
-                {
-                    try
-                    {
-                        deploy adapters: [tomcat9(credentialsId: 'c8b5b2a2-1946-4bb8-94af-e32c07b8035c', path: '', url: 'http://172.31.4.115:8080')], contextPath: 'prodapp', war: '**/*.war'
-                    }
-                    catch(Exception e5)
-                    {
-                      mail bcc: '', body: 'Jenkins was unable to carry CD for the prodapp in the Prod Server. please review.', cc: '', from: '', replyTo: '', subject: 'CD Failed', to: 'deliveryteam@rufyay.com'  
-                    }
-                }
-            }
-        }
-    }
-}
+           
+            
